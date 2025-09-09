@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { languages } from "../languages";
+import { clsx } from "clsx";
 import "./App.css";
 
 function App() {
   const [currentWord, setCurrentWord] = useState("react");
-
+  const [guessedLetters, setGuessedLetters] = useState([]);
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+  function addGuessedLetter(letter) {
+    setGuessedLetters((prevLetters) =>
+      prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
+    );
+  }
 
   const languageElements = languages.map((language) => {
     const styles = {
@@ -26,9 +33,21 @@ function App() {
     </span>
   ));
 
-  const keyboardElements = alphabet
-    .split("")
-    .map((letter, index) => <button key={index}>{letter}</button>);
+  const keyboardElements = alphabet.split("").map((letter) => {
+    const isGuessed = guessedLetters.includes(letter);
+    const isCorrect = isGuessed && currentWord.includes(letter);
+    const isWrong = isGuessed && !currentWord.includes(letter);
+
+    return (
+      <button
+        className={clsx({ correct: isCorrect, wrong: isWrong })}
+        onClick={() => addGuessedLetter(letter)}
+        key={letter}
+      >
+        {letter}
+      </button>
+    );
+  });
 
   return (
     <main>
