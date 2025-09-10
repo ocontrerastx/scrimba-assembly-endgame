@@ -32,16 +32,29 @@ main {
 
 section.game-status {
   margin-block: 30px;
+  min-height: 70px;
   width: 100%;
   max-width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #10a95b;
+  justify-content: center;
   color: #f9f4da;
-  border: 1px dashed #323232;
   border-radius: 4px;
   padding: 8px;
+}
+
+section.game-status.wrong-guess {
+  background-color: #7a5ea7;
+  border: 1px dashed #323232;
+}
+
+section.game-status.won {
+  background-color: #10a95b;
+}
+
+section.game-status.lost {
+  background-color: #ba2a2a;
 }
 
 section.game-status > h2 {
@@ -122,6 +135,11 @@ section.keyboard button.correct {
 
 section.keyboard button.wrong {
   background-color: #ec5d49;
+}
+
+section.keyboard > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 button.new-game {

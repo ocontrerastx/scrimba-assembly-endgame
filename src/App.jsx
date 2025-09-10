@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { languages } from "../languages";
 import { clsx } from "clsx";
+import { getFarewellText } from "../utils";
 import "./App.css";
 
 function App() {
@@ -17,6 +18,10 @@ function App() {
     .every((letter) => guessedLetters.includes(letter));
   const isGameLost = wrongGuessCount >= languages.length - 1;
   const isGameOver = isGameWon || isGameLost;
+  const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
+  const isLastGuessIncorrect =
+    lastGuessedLetter &&
+    !currentWord.includes(guessedLetters[lastGuessedLetter]);
 
   // Static Values
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -62,11 +67,38 @@ function App() {
         className={clsx({ correct: isCorrect, wrong: isWrong })}
         onClick={() => addGuessedLetter(letter)}
         key={letter}
+        disabled={isGameOver}
       >
         {letter}
       </button>
     );
   });
+
+  function renderGameStatus() {
+    if (!isGameOver) {
+      if (isLastGuessIncorrect) {
+        return <p>{getFarewellText(languages[wrongGuessCount - 1].name)}</p>;
+      } else {
+        return null;
+      }
+    }
+
+    if (isGameWon) {
+      return (
+        <>
+          <h2>You win!</h2>
+          <p>Well done! 🎉</p>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h2>Game over!</h2>
+          <p>You lose! Better start learning Assembly 😭</p>
+        </>
+      );
+    }
+  }
 
   return (
     <main>
@@ -77,9 +109,14 @@ function App() {
           from Assembly!
         </p>
       </header>
-      <section className="game-status">
-        <h2>You Win!</h2>
-        <p>Well done! 🎉</p>
+      <section
+        className={clsx("game-status", {
+          "wrong-guess": isLastGuessIncorrect,
+          won: isGameWon,
+          lost: isGameLost,
+        })}
+      >
+        {renderGameStatus()}
       </section>
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
