@@ -4,8 +4,21 @@ import { clsx } from "clsx";
 import "./App.css";
 
 function App() {
+  // State Values
   const [currentWord, setCurrentWord] = useState("react");
   const [guessedLetters, setGuessedLetters] = useState([]);
+
+  // Derived Values
+  const wrongGuessCount = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter)
+  ).length;
+  const isGameWon = currentWord
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
+  const isGameLost = wrongGuessCount >= languages.length - 1;
+  const isGameOver = isGameWon || isGameLost;
+
+  // Static Values
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
   function addGuessedLetter(letter) {
@@ -14,14 +27,20 @@ function App() {
     );
   }
 
-  const languageElements = languages.map((language) => {
+  const languageElements = languages.map((language, index) => {
     const styles = {
       backgroundColor: language.backgroundColor,
       color: language.color,
     };
 
+    const isLanguageLost = index < wrongGuessCount;
+
     return (
-      <span key={language.name} style={styles} className="chip">
+      <span
+        key={language.name}
+        style={styles}
+        className={clsx("chip", { lost: isLanguageLost })}
+      >
         {language.name}
       </span>
     );
@@ -29,7 +48,7 @@ function App() {
 
   const letterElements = currentWord.split("").map((letter, index) => (
     <span key={index} className="letter">
-      {letter}
+      {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
     </span>
   ));
 
@@ -65,7 +84,7 @@ function App() {
       <section className="language-chips">{languageElements}</section>
       <section className="word">{letterElements}</section>
       <section className="keyboard">{keyboardElements}</section>
-      <button className="new-game">New Game</button>
+      {isGameOver && <button className="new-game">New Game</button>}
     </main>
   );
 }
