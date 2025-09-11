@@ -111,6 +111,11 @@ section.word .letter {
   border-bottom: 1px solid #f9f4da;
 }
 
+section.word .letter.missing {
+  color: #ec5d49;
+  border-bottom: 1px solid #ec5d49;
+}
+
 section.keyboard {
   display: flex;
   justify-content: center;

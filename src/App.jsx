@@ -56,11 +56,26 @@ function App() {
     );
   });
 
-  const letterElements = currentWord.split("").map((letter, index) => (
-    <span key={index} className="letter">
-      {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
-    </span>
-  ));
+  const letterElements = currentWord.split("").map((letter, index) => {
+    if (!isGameOver) {
+      return (
+        <span key={index} className="letter">
+          {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
+        </span>
+      );
+    } else {
+      return (
+        <span
+          key={index}
+          className={clsx("letter", {
+            missing: !guessedLetters.includes(letter),
+          })}
+        >
+          {letter.toUpperCase()}
+        </span>
+      );
+    }
+  });
 
   const keyboardElements = alphabet.split("").map((letter) => {
     const isGuessed = guessedLetters.includes(letter);
