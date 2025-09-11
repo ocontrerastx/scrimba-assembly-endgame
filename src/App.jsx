@@ -57,24 +57,18 @@ function App() {
   });
 
   const letterElements = currentWord.split("").map((letter, index) => {
-    if (!isGameOver) {
-      return (
-        <span key={index} className="letter">
-          {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
-        </span>
-      );
-    } else {
-      return (
-        <span
-          key={index}
-          className={clsx("letter", {
-            missing: !guessedLetters.includes(letter),
-          })}
-        >
-          {letter.toUpperCase()}
-        </span>
-      );
-    }
+    const shouldRevealLetter = isGameLost || guessedLetters.includes(letter);
+    return (
+      <span
+        key={index}
+        className={clsx(
+          "letter",
+          isGameLost && !guessedLetters.includes(letter) && "missed-letter"
+        )}
+      >
+        {shouldRevealLetter ? letter.toUpperCase() : ""}
+      </span>
+    );
   });
 
   const keyboardElements = alphabet.split("").map((letter) => {
