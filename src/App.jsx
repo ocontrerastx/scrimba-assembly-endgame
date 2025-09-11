@@ -6,7 +6,7 @@ import "./App.css";
 
 function App() {
   // State Values
-  const [currentWord, setCurrentWord] = useState(getRandomWord);
+  const [currentWord, setCurrentWord] = useState(() => getRandomWord());
   const [guessedLetters, setGuessedLetters] = useState([]);
 
   // Derived Values
@@ -30,6 +30,11 @@ function App() {
     setGuessedLetters((prevLetters) =>
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
     );
+  }
+
+  function startNewGame() {
+    setCurrentWord(getRandomWord());
+    setGuessedLetters([]);
   }
 
   const languageElements = languages.map((language, index) => {
@@ -142,7 +147,11 @@ function App() {
         </p>
       </section>
       <section className="keyboard">{keyboardElements}</section>
-      {isGameOver && <button className="new-game">New Game</button>}
+      {isGameOver && (
+        <button onClick={startNewGame} className="new-game">
+          New Game
+        </button>
+      )}
     </main>
   );
 }
