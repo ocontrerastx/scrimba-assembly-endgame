@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { languages } from "../languages";
 import { clsx } from "clsx";
-import { getFarewellText } from "../utils";
-import { words } from "../words";
+import { getFarewellText, getRandomWord } from "../utils";
 import "./App.css";
 
 function App() {
   // State Values
-  const [currentWord, setCurrentWord] = useState("react");
+  const [currentWord, setCurrentWord] = useState(getRandomWord);
   const [guessedLetters, setGuessedLetters] = useState([]);
 
   // Derived Values
@@ -22,8 +21,7 @@ function App() {
   const isGameOver = isGameWon || isGameLost;
   const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
   const isLastGuessIncorrect =
-    lastGuessedLetter &&
-    !currentWord.includes(guessedLetters[lastGuessedLetter]);
+    lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
   // Static Values
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
